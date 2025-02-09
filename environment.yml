@@ -1,0 +1,10 @@
+name: clearsight
+channels:
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - python-dotenv
+  - requests
+prefix: /opt/anaconda3/envs/clearsight
