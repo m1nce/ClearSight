@@ -9,7 +9,7 @@ To see our proposal, refer to [reports/proposal.pdf](https://github.com/m1nce/Cl
 1. Ensure that Conda installed. If it isn't, you can download [Miniconda](https://docs.anaconda.com/miniconda/)
    or [Anaconda](https://docs.anaconda.com/anaconda/install/) and install it.
 
-2. Install the git repository.
+2. Clone the git repository.
 ```sh
 git pull https://github.com/m1nce/ClearSight.git
 ```
@@ -24,7 +24,7 @@ conda env create -f environment.yml
 conda activate clearsight
 ```
 
-5. Register a Cityscapes account and password. This is necessary to download the data 
+5. Register for a Cityscapes account and password. This is necessary to download the data 
    used in this repository. This is done in [this link](https://www.cityscapes-dataset.com/register/).
 
 6. Create an `.env` file in repository and enter in your username and password in the following format:
