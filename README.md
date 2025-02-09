@@ -4,6 +4,41 @@ A dynamic adaptation framework for real-time object detection in adverse environ
 
 To see our proposal, refer to [reports/proposal.pdf](https://github.com/m1nce/ClearSight/blob/main/reports/proposal.pdf).
 
+<!-- SETUP -->
+## Setup:
+1. Ensure that Conda installed. If it isn't, you can download [Miniconda](https://docs.anaconda.com/miniconda/)
+   or [Anaconda](https://docs.anaconda.com/anaconda/install/) and install it.
+
+2. Install the git repository.
+```sh
+git pull https://github.com/m1nce/ClearSight.git
+```
+
+3. Move to the repository directory and create conda environment.
+```sh
+conda env create -f environment.yml
+```
+
+4. Activate the environment (this must be done everytime your terminal is closed!).
+```sh
+conda activate clearsight
+```
+
+5. Register a Cityscapes account and password. This is necessary to download the data 
+   used in this repository. This is done in [this link](https://www.cityscapes-dataset.com/register/).
+
+6. Create an `.env` file in repository and enter in your username and password in the following format:
+```
+export USERNAME=your_username
+export PASSWORD=your_password
+```
+
+7. Download the data.
+```
+chmod +x get_data.sh
+./get_data.sh
+```
+
 <!-- CONTRIBUTORS -->
 ## Created by:
 * [Minchan Kim](https://github.com/m1nce)
