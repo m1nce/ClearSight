@@ -1,4 +1,4 @@
-name: clearsight
+name: ClearSight
 channels:
   - nvidia
   - conda-forge
@@ -7,4 +7,8 @@ dependencies:
   - pip
   - python-dotenv
   - requests
-prefix: /opt/anaconda3/envs/clearsight
+  - albumentations
+  - numpy
+  - opencv
+  - tqdm
+prefix: /opt/anaconda3/envs/ClearSight
