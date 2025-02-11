@@ -3,7 +3,7 @@
 # ===========================
 # Cityscapes Dataset Downloader
 # ===========================
-# Last updated by Minchan Kim on 2025-02-08
+# Last updated by Minchan Kim on 2025-02-11
 #
 # This scripts logs into the Cityscapes dataset website, 
 # fetches the required dataset, and unzips it.
@@ -35,6 +35,7 @@ echo "Logging in as $USERNAME..."
 wget --quiet --keep-session-cookies --save-cookies=$COOKIE_FILE --post-data "username=$USERNAME&password=$PASSWORD&submit=Login" "$LOGIN_URL"
 
 # Step 2: Download the dataset and save it in the data folder
+cd ..
 OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
 echo "Downloading dataset with package ID: $PACKAGE_ID..."
 wget --load-cookies=$COOKIE_FILE --content-disposition --trust-server-names -O "$OUTPUT_ZIP" "$DOWNLOAD_URL"
