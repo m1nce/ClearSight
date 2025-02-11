@@ -34,9 +34,15 @@ export PASSWORD=your_password
 ```
 
 7. Download the data.
-```
+```sh
+cd utils
 chmod +x get_data.sh
 ./get_data.sh
+```
+
+8. Augment the data to include glaring and foggy conditions.
+```sh
+python augment_cityscapes.py
 ```
 
 <!-- CONTRIBUTORS -->
