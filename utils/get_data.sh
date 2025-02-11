@@ -25,7 +25,7 @@ else
 fi
 
 # Set default package ID if not provided
-PACKAGE_ID="${1:-1}"  # Default to "1" if no argument is given
+PACKAGE_ID="${1:-3}"  # Default to "3" if no argument is given
 COOKIE_FILE="cookies.txt"
 LOGIN_URL="https://www.cityscapes-dataset.com/login/"
 DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACKAGE_ID}"
