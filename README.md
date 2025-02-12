@@ -6,7 +6,7 @@ A dynamic adaptation framework for real-time object detection in adverse environ
   <img src="img/overview_fig.png" alt="drawing" width="600"/>  
 </p>
 
-To see our proposal, refer to [reports/proposal.pdf](https://github.com/m1nce/ClearSight/blob/main/reports/proposal.pdf).
+To view the project's motivation, refer to [reports/proposal.pdf](https://github.com/m1nce/ClearSight/blob/main/reports/proposal.pdf).
 
 <!-- SETUP -->
 ## Setup:
