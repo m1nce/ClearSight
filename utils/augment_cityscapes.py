@@ -1,3 +1,12 @@
+"""
+This script applies foggy and glaring augmentations to the Cityscapes dataset.
+It processes images in 'train', 'val', and 'test' directories and saves augmented
+versions in separate folders using parallel processing (ThreadPoolExecutor).
+
+Author: Minchan Kim
+Usage: python augment_cityscapes.py
+"""
+
 from concurrent.futures import ThreadPoolExecutor
 import albumentations as A
 import cv2
@@ -34,6 +43,9 @@ def augment_and_save():
         split_output_dir = os.path.join(save_root, split)
 
         for city in os.listdir(split_input_dir):
+            if city.startswith("."):  # Ignore hidden files (like .DS_Store)
+                continue
+
             city_input_dir = os.path.join(split_input_dir, city)
             foggy_output_dir = os.path.join(split_output_dir, f"{city}_foggy")
             glaring_output_dir = os.path.join(split_output_dir, f"{city}_glaring")
@@ -41,11 +53,14 @@ def augment_and_save():
             os.makedirs(foggy_output_dir, exist_ok=True)
             os.makedirs(glaring_output_dir, exist_ok=True)
 
-            image_paths = [os.path.join(city_input_dir, img) for img in os.listdir(city_input_dir) if img.endswith("_leftImg8bit.png")]
+            # Filter out .DS_Store and other hidden files
+            image_paths = [os.path.join(city_input_dir, img) for img in os.listdir(city_input_dir) 
+                           if img.endswith("_leftImg8bit.png") and not img.startswith(".")]
 
             # Use ThreadPoolExecutor to process images in parallel
             with ThreadPoolExecutor(max_workers=8) as executor:
-                list(tqdm(executor.map(lambda img: process_image(img, foggy_output_dir, glaring_output_dir), image_paths), total=len(image_paths), desc=f"Processing {city} ({split})"))
+                list(tqdm(executor.map(lambda img: process_image(img, foggy_output_dir, glaring_output_dir), image_paths), 
+                          total=len(image_paths), desc=f"Processing {city} ({split})"))
 
 if __name__ == "__main__":
     augment_and_save()
