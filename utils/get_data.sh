@@ -17,8 +17,8 @@
 #                          specified, it defaults to "1".
 
 # Load environment variables from .env file
-if [[ -f .env ]]; then
-    export $(grep -v '^#' .env | xargs)
+if [[ -f ../.env ]]; then
+    export $(grep -v '^#' ../.env | xargs)
 else
     echo "Error: .env file not found!"
     exit 1
@@ -32,10 +32,10 @@ DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACK
 
 # Step 1: Perform login and save cookies
 echo "Logging in as $USERNAME..."
+cd ..
 wget --quiet --keep-session-cookies --save-cookies=$COOKIE_FILE --post-data "username=$USERNAME&password=$PASSWORD&submit=Login" "$LOGIN_URL"
 
 # Step 2: Download the dataset and save it in the data folder
-cd ..
 OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
 echo "Downloading dataset with package ID: $PACKAGE_ID..."
 wget --load-cookies=$COOKIE_FILE --content-disposition --trust-server-names -O "$OUTPUT_ZIP" "$DOWNLOAD_URL"
