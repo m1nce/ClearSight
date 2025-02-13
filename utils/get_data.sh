@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # ===========================
-# Cityscapes Dataset Downloader
+# Cityscapes Dataset Downloader (With Conda Support)
 # ===========================
-# Last updated by Minchan Kim on 2025-02-11
+# Last updated by Minchan Kim on 2025-02-13
 #
-# This scripts logs into the Cityscapes dataset website, 
+# This script logs into the Cityscapes dataset website, 
 # fetches the required dataset, and unzips it.
 # 
 # Usage: 
@@ -13,8 +13,8 @@
 #   ./get_data.sh [packageID]
 #  
 # Options: 
-#   packageID (optional) - The ID of the dataset package to download. If not 
-#                          specified, it defaults to "1".
+#   packageID (optional) - The ID of the dataset package to download. 
+#                          Defaults to "3" if not specified.
 
 # Load environment variables from .env file
 SCRIPT_DIR="$(dirname "$0")"
@@ -32,29 +32,52 @@ PACKAGE_ID="${1:-3}"  # Default to "3" if no argument is given
 COOKIE_FILE="cookies.txt"
 LOGIN_URL="https://www.cityscapes-dataset.com/login/"
 DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACKAGE_ID}"
+OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
+DATA_DIR="data"
+
+# Detect if aria2c is available (Check both global and Conda)
+if command -v aria2c &>/dev/null; then
+    USE_ARIA2=true
+    ARIA2C_CMD="aria2c"
+    echo "Using system-installed aria2 for faster downloads!"
+elif [[ -n "$CONDA_PREFIX" && -x "$CONDA_PREFIX/bin/aria2c" ]]; then
+    USE_ARIA2=true
+    ARIA2C_CMD="$CONDA_PREFIX/bin/aria2c"
+    echo "Using Conda-installed aria2 for faster downloads!"
+else
+    USE_ARIA2=false
+    echo "aria2 not found. Falling back to wget."
+fi
 
 # Step 1: Perform login and save cookies
 echo "Logging in as $USERNAME..."
 cd ..
-wget --quiet --keep-session-cookies --save-cookies=$COOKIE_FILE --post-data "username=$USERNAME&password=$PASSWORD&submit=Login" "$LOGIN_URL"
+wget --quiet --keep-session-cookies --save-cookies="$COOKIE_FILE" --post-data "username=$USERNAME&password=$PASSWORD&submit=Login" "$LOGIN_URL"
 
-# Step 2: Download the dataset and save it in the data folder
-OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
+# Step 2: Download the dataset
 echo "Downloading dataset with package ID: $PACKAGE_ID..."
-wget --load-cookies=$COOKIE_FILE --content-disposition -O "$OUTPUT_ZIP" "$DOWNLOAD_URL" --retry-connrefused --waitretry=5 --timeout=60 --tries=20
+mkdir -p "$DATA_DIR"
+
+if $USE_ARIA2; then
+    "$ARIA2C_CMD" --max-connection-per-server=16 --split=16 --continue=true \
+        --dir="$DATA_DIR" --out="$OUTPUT_ZIP" --load-cookies="$COOKIE_FILE" "$DOWNLOAD_URL"
+else
+    wget --load-cookies="$COOKIE_FILE" --content-disposition -O "$OUTPUT_ZIP" "$DOWNLOAD_URL" \
+        --retry-connrefused --waitretry=5 --timeout=60 --tries=50 --continue
+fi
 
 # Step 3: Clean up cookies and unwanted intermediate files
-rm -f $COOKIE_FILE index.html
+rm -f "$COOKIE_FILE" index.html
 echo "Download complete! File saved to $OUTPUT_ZIP"
 
 # Step 4: Unzip the downloaded file
 echo "Unzipping the downloaded file..."
-unzip -o "$OUTPUT_ZIP" -d "data/"
+unzip -o "$OUTPUT_ZIP" -d "$DATA_DIR/"
 rm -f "$OUTPUT_ZIP"
-echo "Unzipping complete! Data saved to 'data/' directory."
+echo "Unzipping complete! Data saved to '$DATA_DIR/' directory."
 
 # Step 5: Remove unnecessary files from the dataset
 echo "Cleaning up unnecessary files..."
-rm -f data/index.html data/license.txt data/README*
+rm -f "$DATA_DIR/index.html" "$DATA_DIR/license.txt" "$DATA_DIR/README*"
 
-echo "Dataset setup is complete!"
+echo "🎉 Dataset setup is complete!"
