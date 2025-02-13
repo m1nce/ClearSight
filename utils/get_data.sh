@@ -17,8 +17,11 @@
 #                          specified, it defaults to "1".
 
 # Load environment variables from .env file
-if [[ -f ../.env ]]; then
-    export $(grep -v '^#' ../.env | xargs)
+SCRIPT_DIR="$(dirname "$0")"
+ENV_FILE="$SCRIPT_DIR/../.env"
+
+if [[ -f "$ENV_FILE" ]]; then
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
 else
     echo "Error: .env file not found!"
     exit 1
@@ -38,7 +41,7 @@ wget --quiet --keep-session-cookies --save-cookies=$COOKIE_FILE --post-data "use
 # Step 2: Download the dataset and save it in the data folder
 OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
 echo "Downloading dataset with package ID: $PACKAGE_ID..."
-wget --load-cookies=$COOKIE_FILE --content-disposition --trust-server-names -O "$OUTPUT_ZIP" "$DOWNLOAD_URL"
+wget --load-cookies=$COOKIE_FILE --content-disposition -O "$OUTPUT_ZIP" "$DOWNLOAD_URL" --retry-connrefused --waitretry=5 --timeout=60 --tries=20
 
 # Step 3: Clean up cookies and unwanted intermediate files
 rm -f $COOKIE_FILE index.html
