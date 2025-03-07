@@ -11,7 +11,8 @@ To view the project's motivation, refer to [reports/proposal.pdf](https://github
 <!-- SETUP -->
 ## Setup:
 1. Ensure that Conda installed. If it isn't, you can download [Miniconda](https://docs.anaconda.com/miniconda/)
-   or [Anaconda](https://docs.anaconda.com/anaconda/install/) and install it.
+   or [Anaconda](https://docs.anaconda.com/anaconda/install/) and install it. If you are on Windows, please install it to 
+   [WSL](https://learn.microsoft.com/en-us/windows/wsl/install). [This GitHub Gist](https://gist.github.com/kauffmanes/5e74916617f9993bc3479f401dfec7da) has a very good tutorial to do so. 
 
 2. Clone the git repository.
 ```sh

@@ -35,7 +35,7 @@ DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACK
 OUTPUT_ZIP="dataset_${PACKAGE_ID}.zip"
 DATA_DIR="data"
 
-# Detect if aria2c is available (Check both global and Conda)
+# ✅ Detect if aria2c is available (Check both global and Conda)
 if command -v aria2c &>/dev/null; then
     USE_ARIA2=true
     ARIA2C_CMD="aria2c"
@@ -72,12 +72,13 @@ echo "Download complete! File saved to $OUTPUT_ZIP"
 
 # Step 4: Unzip the downloaded file
 echo "Unzipping the downloaded file..."
-unzip -o "$OUTPUT_ZIP" -d "$DATA_DIR/"
+cd "$DATA_DIR"
+unzip -qo "$OUTPUT_ZIP" | tee /dev/null
 rm -f "$OUTPUT_ZIP"
 echo "Unzipping complete! Data saved to '$DATA_DIR/' directory."
 
 # Step 5: Remove unnecessary files from the dataset
 echo "Cleaning up unnecessary files..."
-rm -f "$DATA_DIR/index.html" "$DATA_DIR/license.txt" "$DATA_DIR/README*"
+rm -f "index.html" "license.txt" "README"
 
 echo "🎉 Dataset setup is complete!"
