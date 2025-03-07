@@ -11,6 +11,12 @@ dependencies:
   - numpy
   - opencv
   - tqdm
+  - nb_conda_kernels
+  - jupyter
+  - matplotlib
   - pip:
       - aria2
+      - torch
+      - torchvision
+      - ipykernel
 prefix: /opt/anaconda3/envs/clearsight
