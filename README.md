@@ -19,8 +19,9 @@ To view the project's motivation, refer to [reports/proposal.pdf](https://github
 git pull https://github.com/m1nce/ClearSight.git
 ```
 
-3. Move to the repository directory and create conda environment.
+3. Move to the repository directory and create a new conda environment.
 ```sh
+cd ClearSight
 conda env create -f environment.yml
 ```
 
