@@ -21,6 +21,7 @@ class ConditionClassifier(nn.Module):
         self.conv4 = depthwise_separable_conv(64, 128, stride=2)
     
         self.global_pool = nn.AdaptiveAvgPool2d(1)
+        self.dropout = nn.Dropout(p=0.3)
         self.fc = nn.Linear(128, num_classes)
 
     def forward(self, x):
