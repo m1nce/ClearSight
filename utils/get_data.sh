@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# ===========================
+# ===========================================================
 # Cityscapes Dataset Downloader (With Conda Support)
-# ===========================
-# Last updated by Minchan Kim on 2025-02-13
+# ===========================================================
+# Last updated by Minchan Kim on 2025-03-08
 #
 # This script logs into the Cityscapes dataset website, 
-# fetches the required dataset, and unzips it.
+# fetches the required dataset, and unzips it. Renames the 
+# directory to 'cityscapes' and cleans up unnecessary files.
 # 
 # Usage: 
 #   chmod +x get_data.sh
@@ -14,7 +15,7 @@
 #  
 # Options: 
 #   packageID (optional) - The ID of the dataset package to download. 
-#                          Defaults to "3" if not specified.
+#                          Defaults to "34" if not specified.
 
 # Load environment variables from .env file
 SCRIPT_DIR="$(dirname "$0")"
@@ -28,7 +29,7 @@ else
 fi
 
 # Set default package ID if not provided
-PACKAGE_ID="${1:-3}"  # Default to "3" if no argument is given
+PACKAGE_ID="${1:-34}"  # Default to "34" if no argument is given
 COOKIE_FILE="cookies.txt"
 LOGIN_URL="https://www.cityscapes-dataset.com/login/"
 DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACKAGE_ID}"
@@ -52,15 +53,16 @@ fi
 # Step 1: Perform login and save cookies
 echo "Logging in as $USERNAME..."
 cd ..
+mkdir -p "$DATA_DIR"
+cd "$DATA_DIR"
 wget --quiet --keep-session-cookies --save-cookies="$COOKIE_FILE" --post-data "username=$USERNAME&password=$PASSWORD&submit=Login" "$LOGIN_URL"
 
 # Step 2: Download the dataset
 echo "Downloading dataset with package ID: $PACKAGE_ID..."
-mkdir -p "$DATA_DIR"
 
 if $USE_ARIA2; then
     "$ARIA2C_CMD" --max-connection-per-server=16 --split=16 --continue=true \
-        --dir="$DATA_DIR" --out="$OUTPUT_ZIP" --load-cookies="$COOKIE_FILE" "$DOWNLOAD_URL"
+        --out="$OUTPUT_ZIP" --load-cookies="$COOKIE_FILE" "$DOWNLOAD_URL"
 else
     wget --load-cookies="$COOKIE_FILE" --content-disposition -O "$OUTPUT_ZIP" "$DOWNLOAD_URL" \
         --retry-connrefused --waitretry=5 --timeout=60 --tries=50 --continue
@@ -72,13 +74,17 @@ echo "Download complete! File saved to $OUTPUT_ZIP"
 
 # Step 4: Unzip the downloaded file
 echo "Unzipping the downloaded file..."
-cd "$DATA_DIR"
 unzip -qo "$OUTPUT_ZIP" | tee /dev/null
 rm -f "$OUTPUT_ZIP"
 echo "Unzipping complete! Data saved to '$DATA_DIR/' directory."
 
-# Step 5: Remove unnecessary files from the dataset
+# Step 5: Rename downloaded file to cityscapes
+extracted_dir=$(ls -td */ | head -n 1 | tr -d '/')
+mv "$extracted_dir" "cityscapes"
+echo "Renamed $extracted_dir directory to cityscapes directory"
+
+# Step 6: Remove unnecessary files from the dataset
 echo "Cleaning up unnecessary files..."
-rm -f "index.html" "license.txt" "README"
+rm -f "index.html" "license.txt" README*
 
 echo "🎉 Dataset setup is complete!"
