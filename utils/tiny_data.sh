@@ -62,6 +62,7 @@ fi
 
 # Cleanup
 rm -rf "__MACOSX"
+find . -name ".DS_Store" -type f -delete
 rm -f "$OUTPUT_ZIP"
 echo "Removed zip file to save space."
 
