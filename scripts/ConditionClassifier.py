@@ -30,6 +30,7 @@ class ConditionClassifier(nn.Module):
         x = self.conv4(x)
         x = self.global_pool(x)
         x = torch.flatten(x, 1)
+        x = self.dropout(x)
         x = self.fc(x)
         
         return x
