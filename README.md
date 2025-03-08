@@ -29,23 +29,14 @@ conda env create -f environment.yml
 conda activate clearsight
 ```
 
-5. Register for a Cityscapes account and password. This is necessary to download the data 
-   used in this repository. This is done in [this link](https://www.cityscapes-dataset.com/register/).
-
-6. Create an `.env` file in repository and enter in your username and password in the following format:
-```
-export USERNAME=your_username
-export PASSWORD=your_password
-```
-
-7. Download the data.
+5. Download the data.
 ```sh
 cd utils
-chmod +x get_data.sh
-./get_data.sh
+chmod +x tiny_data.sh
+bash tiny_data.sh
 ```
 
-8. Augment the data to include glaring and foggy conditions.
+6. Augment the data to include glaring and foggy conditions.
 ```sh
 python augment_cityscapes.py
 ```
