@@ -11,11 +11,11 @@
 # 
 # Usage: 
 #   chmod +x get_data.sh
-#   ./get_data.sh [packageID]
+#   bash get_data.sh [packageID]
 #  
 # Options: 
 #   packageID (optional) - The ID of the dataset package to download. 
-#                          Defaults to "34" if not specified.
+#                          Defaults to "3" if not specified.
 
 # Load environment variables from .env file
 SCRIPT_DIR="$(dirname "$0")"
@@ -29,7 +29,7 @@ else
 fi
 
 # Set default package ID if not provided
-PACKAGE_ID="${1:-34}"  # Default to "34" if no argument is given
+PACKAGE_ID="${1:-3}"  # Default to "3" if no argument is given
 COOKIE_FILE="cookies.txt"
 LOGIN_URL="https://www.cityscapes-dataset.com/login/"
 DOWNLOAD_URL="https://www.cityscapes-dataset.com/file-handling/?packageID=${PACKAGE_ID}"

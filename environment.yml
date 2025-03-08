@@ -15,7 +15,7 @@ dependencies:
   - jupyter
   - matplotlib
   - pip:
-      - aria2
+      - gdown
       - torch
       - torchvision
       - ipykernel
