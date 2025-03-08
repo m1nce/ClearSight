@@ -7,7 +7,6 @@ dependencies:
   - pip
   - python-dotenv
   - requests
-  - albumentations
   - numpy
   - opencv
   - tqdm
@@ -19,4 +18,5 @@ dependencies:
       - torch
       - torchvision
       - ipykernel
+      - albumentations
 prefix: /opt/anaconda3/envs/clearsight

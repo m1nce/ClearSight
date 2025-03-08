@@ -14,14 +14,16 @@ import os
 from tqdm import tqdm
 
 # Define Paths
-dataset_root = "../data/leftImg8bit"
-save_root = "../data/aug_leftImg8bit"
+dataset_root = "../data/cityscapes"
+save_root = "../data/aug_cityscapes"
 
 os.makedirs(save_root, exist_ok=True)
 
 # Define Augmentations
-foggy_transform = A.Compose([A.RandomFog(fog_coef_lower=0.3, fog_coef_upper=0.6, alpha_coef=0.1, p=1)])
-glaring_transform = A.Compose([A.RandomSunFlare(flare_roi=(0, 0, 1, 0.5), num_flare_circles_lower=6, num_flare_circles_upper=10, src_radius=150, src_color=(255, 255, 255), p=1)])
+foggy_transform = A.Compose([A.RandomFog(fog_coef_range=(0.2, 0.5), alpha_coef=0.1, p=1.0)])
+glaring_transform = A.Compose([
+    A.RandomSunFlare(flare_roi=(0, 0, 1, 0.5), src_radius=150, src_color=(255, 255, 255), num_flare_circles_range=(6, 10), p=1, method='physics_based')
+])
 
 def process_image(image_path, foggy_output_dir, glaring_output_dir):
     image = cv2.imread(image_path)
