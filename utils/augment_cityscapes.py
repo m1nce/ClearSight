@@ -20,9 +20,9 @@ save_root = "../data/aug_cityscapes"
 os.makedirs(save_root, exist_ok=True)
 
 # Define Augmentations
-foggy_transform = A.Compose([A.RandomFog(fog_coef_range=(0.2, 0.5), alpha_coef=0.1, p=1.0)])
+foggy_transform = A.Compose([A.RandomFog(fog_coef_range=(0.3, 0.6), alpha_coef=0.1, p=1.0)])
 glaring_transform = A.Compose([
-    A.RandomSunFlare(flare_roi=(0, 0, 1, 0.5), src_radius=150, src_color=(255, 255, 255), num_flare_circles_range=(6, 10), p=1, method='physics_based')
+    A.RandomSunFlare(flare_roi=(0, 0, 1, 1), angle_range=(0, 1), src_radius=200, src_color=(255, 255, 255), num_flare_circles_range=(6, 10), p=1, method='physics_based')
 ])
 
 def process_image(image_path, foggy_output_dir, glaring_output_dir):
