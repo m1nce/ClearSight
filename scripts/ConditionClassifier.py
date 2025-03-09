@@ -15,14 +15,14 @@ class ConditionClassifier(nn.Module):
                 nn.ReLU(inplace=True),
             )
 
-        self.conv1 = depthwise_separable_conv(3, 16)
-        self.conv2 = depthwise_separable_conv(16, 32, stride=2)
-        self.conv3 = depthwise_separable_conv(32, 64, stride=2)
-        self.conv4 = depthwise_separable_conv(64, 128, stride=2)
+        self.conv1 = depthwise_separable_conv(3, 8)
+        self.conv2 = depthwise_separable_conv(8, 16, stride=2)
+        self.conv3 = depthwise_separable_conv(16, 32, stride=2)
+        self.conv4 = depthwise_separable_conv(32, 64, stride=2)
     
         self.global_pool = nn.AdaptiveAvgPool2d(1)
         self.dropout = nn.Dropout(p=0.3)
-        self.fc = nn.Linear(128, num_classes)
+        self.fc = nn.Linear(64, num_classes)
 
     def forward(self, x):
         x = self.conv1(x)
