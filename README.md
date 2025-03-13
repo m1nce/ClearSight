@@ -42,6 +42,11 @@ bash tiny_data.sh
 python augment_cityscapes.py
 ```
 
+7. Train the mobilenet model.
+```sh 
+python train_model.py
+```
+
 <!-- CONTRIBUTORS -->
 ## Created by:
 * [Minchan Kim](https://github.com/m1nce)
