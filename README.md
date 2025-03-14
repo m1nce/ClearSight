@@ -30,19 +30,21 @@ conda env create -f environment.yml
 conda activate clearsight
 ```
 
-5. Download the data.
+5. Download the tiny Cityscapes and gtfine data.
 ```sh
 cd utils
 chmod +x tiny_data.sh
 bash tiny_data.sh
+chmod +x tiny_gtfine.sh
+bash tiny_gtfine.sh
 ```
 
-6. Augment the data to include glaring and foggy conditions.
+6. Augment the Cityscapes data to include glaring and foggy conditions.
 ```sh
 python augment_cityscapes.py
 ```
 
-7. Train the mobilenet model.
+7. Train the MobileNet model.
 ```sh 
 python train_model.py
 ```
