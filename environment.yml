@@ -20,4 +20,5 @@ dependencies:
       - ipykernel
       - albumentations
       - ultralytics
+      - GitPython
 prefix: /opt/anaconda3/envs/clearsight
