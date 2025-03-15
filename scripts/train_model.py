@@ -88,9 +88,11 @@ if __name__ == "__main__":
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    # Load dataset
-    train_dataset = ConditionDataset(original_path='../data/cityscapes/train', augmented_path='../data/aug_cityscapes/train', transform=transform)
-    val_dataset = ConditionDataset(original_path='../data/cityscapes/val', augmented_path='../data/aug_cityscapes/val', transform=transform)
+    # Load dataset using torch.utils.data.DataLoader
+    train_dataset = ConditionDataset(original_path='../data/cityscapes/train', 
+                                     augmented_path='../data/aug_cityscapes/train', transform=transform)
+    val_dataset = ConditionDataset(original_path='../data/cityscapes/val', 
+                                   augmented_path='../data/aug_cityscapes/val', transform=transform)
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=4)
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=4)
@@ -111,9 +113,13 @@ if __name__ == "__main__":
     optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-5)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=1e-6)
 
-    # Train and save the model
+    # Train model
     train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=args.epochs)
 
+    # Create models directory
+    os.mkdir('../models', exist_ok=True)
+
+    # Save model to ../models/
     model_name = f"{args.model}_condition_classifier.pth"
     model_path = os.path.join('../models', model_name)
     torch.save(model.state_dict(), model_path)
