@@ -34,8 +34,8 @@ conda activate clearsight
 ```sh
 cd utils
 chmod +x tiny_data.sh
-bash tiny_data.sh
 chmod +x tiny_gtfine.sh
+bash tiny_data.sh
 bash tiny_gtfine.sh
 ```
 
