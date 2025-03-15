@@ -21,4 +21,5 @@ dependencies:
       - albumentations
       - ultralytics
       - GitPython
+      - cityscapesscripts
 prefix: /opt/anaconda3/envs/clearsight
