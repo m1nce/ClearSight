@@ -30,11 +30,9 @@ conda env create -f environment.yml
 conda activate clearsight
 ```
 
-5. Download the tiny Cityscapes and gtfine data.
+5. Download the necessary data.
 ```sh
 cd utils
-chmod +x tiny_data.sh
-chmod +x tiny_gtfine.sh
 bash tiny_data.sh
 bash tiny_gtfine.sh
 ```
@@ -45,8 +43,16 @@ python augment_cityscapes.py
 ```
 
 7. Train the MobileNet model.
-```sh 
+```sh
+cd ../scripts
 python train_model.py
+```
+
+8. Convert gtFine to work with YOLO and reorganize data directory.
+```sh
+cd ../utils
+python convert_gtfine.py
+bash reorganize.sh
 ```
 
 <!-- CONTRIBUTORS -->
