@@ -117,10 +117,12 @@ if __name__ == "__main__":
     train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=args.epochs)
 
     # Create models directory
-    os.mkdir('../models', exist_ok=True)
+    models_dir = os.path.join(parent_dir, 'models')
+    if not os.path.exists(models_dir):
+        os.mkdir(models_dir)
 
     # Save model to ../models/
     model_name = f"{args.model}_condition_classifier.pth"
-    model_path = os.path.join('../models', model_name)
+    model_path = os.path.join(models_dir, model_name)
     torch.save(model.state_dict(), model_path)
     print(f"Model saved as {model_name}")
