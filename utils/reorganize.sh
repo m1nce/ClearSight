@@ -117,3 +117,5 @@ rm -rf images/val/frankfurt
 rm -rf images/val/lindau
 rm -rf images/test/berlin
 cd ..
+
+# -------------------- WORK ON THIS, MAKE NEW DIRECTORY THAT HAS EVERYTHING --------------------------- #
