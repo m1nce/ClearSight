@@ -28,11 +28,11 @@ rm -rf val/lindau
 mv train images/
 mv val images/
 mv test images/
-rm -rf images/train/hamburg
-rm -rf images/train/stuttgart
-rm -rf images/val/frankfurt
-rm -rf images/val/lindau
-rm -rf images/test/berlin
+rm -rf labels/train/hamburg
+rm -rf labels/train/stuttgart
+rm -rf labels/val/frankfurt
+rm -rf labels/val/lindau
+rm -rf labels/test/berlin
 cd ..
 mv cityscapes clear_cityscapes
 
@@ -70,11 +70,11 @@ rm -rf val/lindau
 mv train images/
 mv val images/
 mv test images/
-rm -rf images/train/hamburg
-rm -rf images/train/stuttgart
-rm -rf images/val/frankfurt
-rm -rf images/val/lindau
-rm -rf images/test/berlin
+rm -rf labels/train/hamburg
+rm -rf labels/train/stuttgart
+rm -rf labels/val/frankfurt
+rm -rf labels/val/lindau
+rm -rf labels/test/berlin
 cd ..
 
 # organize glaring_cityscapes directory
@@ -111,11 +111,11 @@ rm -rf val/lindau
 mv train images/
 mv val images/
 mv test images/
-rm -rf images/train/hamburg
-rm -rf images/train/stuttgart
-rm -rf images/val/frankfurt
-rm -rf images/val/lindau
-rm -rf images/test/berlin
+rm -rf labels/train/hamburg
+rm -rf labels/train/stuttgart
+rm -rf labels/val/frankfurt
+rm -rf labels/val/lindau
+rm -rf labels/test/berlin
 cd ..
 
 # -------------------- WORK ON THIS, MAKE NEW DIRECTORY THAT HAS EVERYTHING --------------------------- #
