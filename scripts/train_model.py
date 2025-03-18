@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+import csv
+import json
 import torch
 import torch.optim as optim
 from torchvision import models, transforms
@@ -31,34 +33,49 @@ def parse_args():
     return parser.parse_args()
 
 # Training function
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=10):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=10, log_path=None):
     model.train()
     
-    for epoch in range(num_epochs):
-        running_loss = 0.0
-        correct, total = 0, 0
+    results = []  # Store results for CSV/JSON output
+    
+    with open(log_path, 'w') as log_file:  # Open log file
+        log_file.write("Epoch,Train Loss,Validation Accuracy\n")  # Header
         
-        for images, labels in train_loader:
-            images, labels = images.to(device), labels.to(device)
+        for epoch in range(num_epochs):
+            running_loss = 0.0
+            correct, total = 0, 0
+            
+            for images, labels in train_loader:
+                images, labels = images.to(device), labels.to(device)
 
-            # Forward pass
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
+                # Forward pass
+                optimizer.zero_grad()
+                outputs = model(images)
+                loss = criterion(outputs, labels)
 
-            # Backward pass
-            loss.backward()
-            optimizer.step()
+                # Backward pass
+                loss.backward()
+                optimizer.step()
 
-            # Metrics
-            running_loss += loss.item()
-            _, predicted = torch.max(outputs, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-        
-        scheduler.step()
-        val_acc = evaluate_model(model, val_loader)
-        print(f"Epoch {epoch+1}/{num_epochs} - Loss: {running_loss/len(train_loader):.4f} - Val Acc: {val_acc:.2f}%")
+                # Metrics
+                running_loss += loss.item()
+                _, predicted = torch.max(outputs, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+            
+            scheduler.step()
+            val_acc = evaluate_model(model, val_loader)
+            avg_loss = running_loss / len(train_loader)
+            
+            # Save to log file
+            log_file.write(f"{epoch+1},{avg_loss:.4f},{val_acc:.2f}\n")
+            
+            # Save to results list for CSV/JSON
+            results.append({"epoch": epoch+1, "train_loss": avg_loss, "val_acc": val_acc})
+            
+            print(f"Epoch {epoch+1}/{num_epochs} - Loss: {avg_loss:.4f} - Val Acc: {val_acc:.2f}%")
+    
+    return results 
 
 # Evaluation function
 def evaluate_model(model, val_loader):
@@ -88,7 +105,7 @@ if __name__ == "__main__":
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    # Load dataset using torch.utils.data.DataLoader
+    # Load dataset
     train_dataset = ConditionDataset(original_path='../data/cityscapes/train', 
                                      augmented_path='../data/aug_cityscapes/train', transform=transform)
     val_dataset = ConditionDataset(original_path='../data/cityscapes/val', 
@@ -113,14 +130,31 @@ if __name__ == "__main__":
     optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-5)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=1e-6)
 
-    # Train model
-    train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=args.epochs)
+    # Create logs directory
+    os.makedirs('../logs', exist_ok=True)
+    log_file_path = f"../logs/{args.model}_training_log.csv"
 
-    # Create models directory
-    os.mkdir('../models', exist_ok=True)
+    # Train model and get results
+    results = train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, num_epochs=args.epochs, log_path=log_file_path)
 
-    # Save model to ../models/
+    # Save model
+    os.makedirs('../models', exist_ok=True)
     model_name = f"{args.model}_condition_classifier.pth"
     model_path = os.path.join('../models', model_name)
     torch.save(model.state_dict(), model_path)
     print(f"Model saved as {model_name}")
+
+    # Save results as CSV
+    csv_path = f"../logs/{args.model}_training_results.csv"
+    with open(csv_path, 'w', newline='') as csvfile:
+        fieldnames = ["epoch", "train_loss", "val_acc"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(results)
+    print(f"Training results saved as {csv_path}")
+
+    # Save results as JSON
+    json_path = f"../logs/{args.model}_training_results.json"
+    with open(json_path, 'w') as jsonfile:
+        json.dump(results, jsonfile, indent=4)
+    print(f"Training results saved as {json_path}")

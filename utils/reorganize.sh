@@ -2,6 +2,33 @@
 
 cd ../data
 
+# rename .png
+rename_files() {
+    local dir=$1
+    if [ -d "$dir" ]; then
+        for file in "$dir"/*_leftImg8bit.png; do
+            [ -f "$file" ] || continue 
+            mv "$file" "${file/_leftImg8bit/}"
+        done
+    fi
+}
+
+rename_files "cityscapes/train/hamburg"
+rename_files "cityscapes/train/stuttgart"
+rename_files "cityscapes/val/frankfurt"
+rename_files "cityscapes/val/lindau"
+rename_files "cityscapes/test/berlin"
+rename_files "aug_cityscapes/train/hamburg_foggy"
+rename_files "aug_cityscapes/train/stuttgart_foggy"
+rename_files "aug_cityscapes/train/hamburg_glaring"
+rename_files "aug_cityscapes/train/stuttgart_glaring"
+rename_files "aug_cityscapes/val/frankfurt_foggy"
+rename_files "aug_cityscapes/val/lindau_foggy"
+rename_files "aug_cityscapes/val/frankfurt_glaring"
+rename_files "aug_cityscapes/val/lindau_glaring"
+rename_files "aug_cityscapes/test/berlin_foggy"
+rename_files "aug_cityscapes/test/berlin_glaring"
+
 cp -r yolo_labels yolo_labels1
 cp -r yolo_labels yolo_labels2
 cp -r yolo_labels yolo_labels3
